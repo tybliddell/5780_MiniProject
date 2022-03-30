@@ -1,8 +1,9 @@
-/* USER CODE BEGIN Header */
+
 /**
   ******************************************************************************
   * @file           : main.c
   * @brief          : Main program body
+  * @authors		: Tyler Liddel, Hyrum Saunders
   ******************************************************************************
   * @attention
   *
@@ -15,20 +16,88 @@
   *
   ******************************************************************************
   */
-/* USER CODE END Header */
-/* Includes ------------------------------------------------------------------*/
+  
+/* ---------------- Includes ---------------- */
 #include "main.h"
 #include <stdio.h>
 
-void SystemClock_Config(void);
-
+/* ---------------- Globals ---------------- */
 uint16_t block;
 uint16_t curr_x;
 uint16_t curr_y;
 uint8_t phase;
 
-void transmit_string_uart(uint8_t send[]);
-void transmit_uart(uint8_t send);
+/**
+  * @brief  The application entry point.
+  * @retval int
+  */
+int main(void)
+{
+  // Reset of all peripherals, Initializes the Flash interface and the Systick
+  HAL_Init();
+
+  // Configure the system clock
+  SystemClock_Config();
+  
+	PWM_init();
+	
+	LED_init();
+	
+	uint8_t upcount = 1, pan = 90, tilt = 90;
+
+	block = 0;			
+	
+	// UART
+	// PC4: TX, PC5: RX
+	RCC->APB1ENR |= RCC_APB1ENR_USART3EN;
+	GPIOC->MODER |= (2 << 8) | (2 << 10); // Set to alternate function mode
+	GPIOC->AFR[0] |= (1 << 16)| (1 << 20); // Set to correct AF mode for pin 4 and 5
+	USART3->CR1 |= (1 << 3) | (1 << 2); // TX en, RX en
+	USART3->BRR = HAL_RCC_GetHCLKFreq() / 115200; // Target baud rate of 115200
+	USART3->CR1 |= (1 << 5); // RXNE interrupt enable
+	NVIC_EnableIRQ(USART3_4_IRQn); // Enable interrupt for USART 3/4
+	NVIC_SetPriority(USART3_4_IRQn, 0); // Set priority for USART 3/4
+	
+	USART3->CR1 |= 1; // USART en
+
+  while (1)
+  {
+		// Blue ticking means while loop running
+		toggle_LED(BLUE);
+		transmit_uart(curr_x >> 8);
+		HAL_Delay(1);
+		transmit_uart('\0');
+		HAL_Delay(1);
+		transmit_uart(curr_x);
+		HAL_Delay(1);
+		transmit_uart('\0');
+		HAL_Delay(1);
+		transmit_uart(curr_y);
+		HAL_Delay(1);
+		transmit_uart('\n');
+		HAL_Delay(50);
+		
+		// Motor test
+		if (pan < 1)
+		{
+			upcount = 1;
+		}
+		else if (pan > 179)
+		{
+			upcount = 0;
+		}
+		if (upcount)
+		{
+			pan++;
+		}
+		else if (!upcount)
+		{
+			pan--;
+		}
+		set_motor_pos(pan, tilt);
+		HAL_Delay(1);
+  }
+}
 
 /*
 * All interrupts use the same interrupt handler. Must check status of flags before changing anything
@@ -77,61 +146,6 @@ void USART3_4_IRQHandler()
 	}
 }
 
-/**
-  * @brief  The application entry point.
-  * @retval int
-  */
-int main(void)
-{
-  HAL_Init();
-
-	SystemClock_Config();
-
-	block = 0;
-	
-	RCC->AHBENR |= RCC_AHBENR_GPIOCEN;
-	RCC->APB1ENR |= RCC_APB1ENR_USART3EN;
-	
-	// LED
-	RCC->AHBENR |= RCC_AHBENR_GPIOCEN;
-	RCC->APB1ENR |= RCC_APB1ENR_USART3EN; // Enable GPIOC peripheral clock
-	
-	GPIOC->MODER |= (1 << 12) | (1 << 14) | (1 << 16) | (1 << 18); // Set MODER to general-purpose output mode
-	GPIOC->OTYPER  &= ~((1 << 6) | (1 << 7) | (1 << 8) | (1 << 9)); // Set OTYPER to push-pull output type
-	GPIOC->OSPEEDR &= ~((3 << 12) | (3 << 14) | (3 << 16) | (3 << 18)); // Set OSPEEDR to low speed
-	GPIOC->PUPDR &= ~((3 << 12) | (3 << 14) | (3 << 16) | (3 << 18)); // Set PUPDR to no pull-up pull-down 			
-	
-	// UART
-	// PC4: TX, PC5: RX
-	GPIOC->MODER |= (2 << 8) | (2 << 10); // Set to alternate function mode
-	GPIOC->AFR[0] |= (1 << 16)| (1 << 20); // Set to correct AF mode for pin 4 and 5
-	USART3->CR1 |= (1 << 3) | (1 << 2); // TX en, RX en
-	USART3->BRR = HAL_RCC_GetHCLKFreq() / 115200; // Target baud rate of 115200
-	USART3->CR1 |= (1 << 5); // RXNE interrupt enable
-	NVIC_EnableIRQ(USART3_4_IRQn); // Enable interrupt for USART 3/4
-	NVIC_SetPriority(USART3_4_IRQn, 0); // Set priority for USART 3/4
-	
-	USART3->CR1 |= 1; // USART en
-
-  while (1)
-  {
-		// Blue ticking means while loop running
-		GPIOC->ODR ^= (1 << 7);
-		transmit_uart(curr_x >> 8);
-		HAL_Delay(1);
-		transmit_uart('\0');
-		HAL_Delay(1);
-		transmit_uart(curr_x);
-		HAL_Delay(1);
-		transmit_uart('\0');
-		HAL_Delay(1);
-		transmit_uart(curr_y);
-		HAL_Delay(1);
-		transmit_uart('\n');
-		HAL_Delay(50);
-  }
-}
-
 void transmit_uart(uint8_t send) 
 {
 	while(!(USART1->ISR & USART_ISR_TC));
@@ -147,6 +161,128 @@ void transmit_string_uart(uint8_t send[])
 		transmit_uart(send[i]);
 		HAL_Delay(1);
 		i++;
+	}
+}
+
+/**
+  * @brief Connects PB4 and PB5 to TIM3_CH1 and TIM3_CH2 respectively
+	*				 and configures the PWM to have a 50 Hz period
+  */
+void PWM_init(void)
+{
+	// Enable necessary clocks
+	RCC->AHBENR |= RCC_AHBENR_GPIOBEN_Msk;
+	RCC->APB1ENR |= RCC_APB1ENR_TIM3EN_Msk;
+	
+	// Put PB4 and PB5 in AF1
+	GPIOB->MODER |= (2 << 8) | (2 << 10);
+	GPIOB->AFR[0] |= (1 << 16) | (1 << 20);	
+	
+	/*
+	 * Configure timer 3 to a 50 Hz Period
+	 * with as large a ARR (range of values)
+	 * as possible so I can have very precise
+	 * duty cycles.
+	 */
+	TIM3->PSC = 4;
+	TIM3->ARR = 40000;
+	
+	// Configure timer 3 output channels to PWM
+	TIM3->CCMR1 |= (6 << 4);  // Set channel 1 to PWM mode 1 - In upcounting, channel 1 is active when TIMx_CNT < TIMx_CCR1
+	TIM3->CCMR1 |= (6 << 12);  // Set channel 2 to PWM mode 1 - In upcounting, channel 2 is active when TIMx_CNT < TIMx_CCR2
+	
+	// Output compare 1 and 2 preload enable. Read/Write operations go to preload register,
+	// preload value loaded in active register at update events.
+	TIM3->CCMR1 |= (1 << 3);  // Output compare 1 preload enable
+	TIM3->CCMR1 |= (1 << 11);  // Output compare 2 preload enable
+	
+	// Enable channel 1 and 2 in CCER
+	TIM3->CCER |= 1;
+	TIM3->CCER |= (1 << 4);
+	
+	/*
+	 * Capture compare registers will start at 7.5%
+	 * duty cycle (90 deg). The duty cycle should
+	 * always stay between 5-10% (1170-4230)
+	 */
+	TIM3->CCR1 = 4230; // PB4
+	TIM3->CCR2 = 2700; // PB5
+	
+	// Enable timer 3
+	TIM3->CR1 = 1;
+}
+
+/**
+  * @brief Sets the motor at a point between 0-180 degrees
+  */
+void set_motor_pos(int pan, int tilt)
+{
+	TIM3->CCR1 = 1170 + (pan * 17);
+	TIM3->CCR2 = 1170 + (tilt * 17);
+}
+
+/**
+  * @brief This function sets up the LED GPIO pins
+  */
+void LED_init(void)
+{
+	// Enable clock
+	RCC->AHBENR |= RCC_AHBENR_GPIOCEN_Msk;
+	
+	// Set pins PC6, PC7, PC8, and PC9 (all LEDs) to general-purpose output mode
+	GPIOC->MODER |= (1 << 12);
+	GPIOC->MODER |= (1 << 14);
+	GPIOC->MODER |= (1 << 16);
+	GPIOC->MODER |= (1 << 18);
+	
+	// Set LEDs to push-pull, low speed, no pull-up/down resistors
+	GPIOC->OTYPER = 0;
+	GPIOC->OSPEEDR = 0;
+	GPIOC->PUPDR = 0;
+}
+
+/**
+  * @brief This function checks if an LED is currently high
+  * @param LED_num (int): The number corresponding to the LED pin. Ex: PC6 would be 6.
+  * @retval int: 1 if LED is high, 0 otherwise
+  */
+int LED_is_on(int LED_num)
+{
+	return GPIOC->ODR & (1 << LED_num);
+}
+
+/**
+  * @brief This function sets the LED pin passed in to high
+  * @param LED_num (int): The number corresponding to the LED pin. Ex: PC6 would be 6.
+  * @retval None
+  */
+void turn_on_LED(int LED_num)
+{
+	GPIOC->ODR |= (1 << LED_num);
+}
+
+/**
+  * @brief This function sets the LED pin passed in to low
+  * @param LED_num (int): The number corresponding to the LED pin. Ex: PC6 would be 6.
+  * @retval None
+  */
+void turn_off_LED(int LED_num)
+{
+	GPIOC->ODR &= ~(1 << LED_num);
+}
+
+/**
+  * @brief This function toggles the LED pin passed in
+  * @param LED_num (int): The number corresponding to the LED pin. Ex: PC6 would be 6.
+  * @retval None
+  */
+void toggle_LED(int LED_num)
+{
+	if (LED_is_on(LED_num)) {
+		turn_off_LED(LED_num);
+	}
+	else {
+		turn_on_LED(LED_num);
 	}
 }
 
@@ -183,10 +319,6 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 }
-
-/* USER CODE BEGIN 4 */
-
-/* USER CODE END 4 */
 
 /**
   * @brief  This function is executed in case of error occurrence.

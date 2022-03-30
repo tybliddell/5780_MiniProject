@@ -4,6 +4,7 @@
   * @file           : main.h
   * @brief          : Header for main.c file.
   *                   This file contains the common defines of the application.
+  * @author			: Hyrum Saunders
   ******************************************************************************
   * @attention
   *
@@ -16,50 +17,44 @@
   *
   ******************************************************************************
   */
-/* USER CODE END Header */
+	
+/* ---------------- Includes ---------------- */
+#include "stm32f0xx_hal.h"
 
-/* Define to prevent recursive inclusion -------------------------------------*/
+/* ---------------- Forward Declarations ---------------- */
+// System
+void Error_Handler(void);
+void SystemClock_Config(void);
+
+// LED
+void LED_init(void);
+int LED_is_on(int);
+void turn_on_LED(int);
+void turn_off_LED(int);
+void toggle_LED(int);
+
+// Motor control
+void PWM_init(void);
+void set_motor_pos(int, int);
+
+// UART
+void transmit_string_uart(uint8_t send[]);
+void transmit_uart(uint8_t send);
+
+/* ---------------- Definitions ---------------- */
+// LED
+#define RED 6
+#define BLUE 7
+#define ORANGE 8
+#define GREEN 9
+
+// System
 #ifndef __MAIN_H
 #define __MAIN_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/* Includes ------------------------------------------------------------------*/
-#include "stm32f0xx_hal.h"
-
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
-
-/* USER CODE END Includes */
-
-/* Exported types ------------------------------------------------------------*/
-/* USER CODE BEGIN ET */
-
-/* USER CODE END ET */
-
-/* Exported constants --------------------------------------------------------*/
-/* USER CODE BEGIN EC */
-
-/* USER CODE END EC */
-
-/* Exported macro ------------------------------------------------------------*/
-/* USER CODE BEGIN EM */
-
-/* USER CODE END EM */
-
-/* Exported functions prototypes ---------------------------------------------*/
-void Error_Handler(void);
-
-/* USER CODE BEGIN EFP */
-
-/* USER CODE END EFP */
-
-/* Private defines -----------------------------------------------------------*/
-/* USER CODE BEGIN Private defines */
-
-/* USER CODE END Private defines */
 
 #ifdef __cplusplus
 }
