@@ -25,7 +25,15 @@
 uint16_t block;
 uint16_t curr_x;
 uint16_t curr_y;
+uint16_t last_x;
+uint16_t last_y;
 uint8_t phase;
+uint16_t dup_count;
+
+uint16_t curr_pan;
+uint16_t curr_tilt;
+uint16_t scale;
+uint32_t wait_time;
 
 /**
   * @brief  The application entry point.
@@ -44,7 +52,14 @@ int main(void)
 	LED_init();
 	
 	uint8_t upcount = 1, pan = 90, tilt = 90;
-
+	curr_pan = 90;
+	curr_tilt = 0;
+	curr_x = 157;
+	curr_y = 103;
+	scale = 2;
+	wait_time = 5;
+	dup_count = 0;
+	
 	block = 0;
 	
 	// UART
@@ -64,11 +79,11 @@ int main(void)
   {
 		// Blue ticking means while loop running
 		toggle_LED(BLUE);
-		transmit_uart(curr_x >> 8);
+		/*transmit_uart(curr_x >> 8);
 		transmit_uart(curr_x);
 		transmit_uart(curr_y);
 		transmit_uart('\n');
-		
+		HAL_Delay(50);
 		// Motor test
 		if (pan < 1)
 		{
@@ -87,7 +102,52 @@ int main(void)
 			pan--;
 		}
 		//set_motor_pos(pan, tilt);
-		HAL_Delay(1);
+		HAL_Delay(1);*/
+		
+		
+		if(curr_x > 157) 
+			curr_pan -= scale;
+		else
+			curr_pan += scale;
+		
+		if(curr_y > 103)
+			curr_tilt += scale;
+		else 
+			curr_tilt -= scale;
+		
+		if(curr_pan > 4200)
+			curr_pan = 4200;
+		if(curr_pan < 880)
+			curr_pan = 880;
+		
+		if(curr_tilt > 4200)
+			curr_tilt = 4200;
+		if(curr_tilt < 880)
+			curr_tilt = 880;
+		
+		if(dup_count < 50) {
+			set_motor_pos(curr_pan, curr_tilt);
+			toggle_LED(GREEN);
+		}
+		if(last_x == curr_x && last_y == curr_y) {
+			dup_count++;
+		}
+		else
+			dup_count = 0;
+		
+		if(dup_count == 100)
+			dup_count--;
+		/*transmit_uart(curr_pan >> 8);
+		transmit_uart(curr_pan);
+		transmit_uart(curr_tilt >> 8);
+		transmit_uart(curr_tilt);
+		transmit_uart('\n');*/
+		last_x = curr_x;
+		last_y = curr_y;
+		HAL_Delay(wait_time);
+		
+		//HAL_Delay(wait_time);
+		
   }
 }
 
@@ -132,6 +192,7 @@ void USART3_4_IRQHandler()
 		case 14:
 			// Final piece of block
 			phase = 0;
+			toggle_LED(ORANGE);
 			break;
 		default:
 		  phase++;		
@@ -197,8 +258,8 @@ void PWM_init(void)
 	 * duty cycle (90 deg). The duty cycle should
 	 * always stay between 5-10% (1170-4230)
 	 */
-	TIM3->CCR1 = 4230; // PB4 Pan
-	TIM3->CCR2 = 1170; // PB5 Tilt
+	TIM3->CCR1 = 850; // PB4 Pan
+	TIM3->CCR2 = 850; // PB5 Tilt
 	
 	// Enable timer 3
 	TIM3->CR1 = 1;
@@ -209,8 +270,10 @@ void PWM_init(void)
   */
 void set_motor_pos(int pan, int tilt)
 {
-	TIM3->CCR1 = 1170 + (pan * 17);
-	TIM3->CCR2 = 1170 + (tilt * 17);
+	//TIM3->CCR1 = 1170 + (pan * 17);
+	//TIM3->CCR2 = 1170 + (tilt * 17);
+	TIM3->CCR1 = 850 + pan;
+	TIM3->CCR2 = 850 + tilt;
 }
 
 /**
