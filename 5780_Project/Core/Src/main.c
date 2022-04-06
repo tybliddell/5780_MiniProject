@@ -65,17 +65,9 @@ int main(void)
 		// Blue ticking means while loop running
 		toggle_LED(BLUE);
 		transmit_uart(curr_x >> 8);
-		HAL_Delay(1);
-		transmit_uart('\0');
-		HAL_Delay(1);
 		transmit_uart(curr_x);
-		HAL_Delay(1);
-		transmit_uart('\0');
-		HAL_Delay(1);
 		transmit_uart(curr_y);
-		HAL_Delay(1);
 		transmit_uart('\n');
-		HAL_Delay(50);
 		
 		// Motor test
 		if (pan < 1)
@@ -151,6 +143,7 @@ void transmit_uart(uint8_t send)
 	while(!(USART1->ISR & USART_ISR_TC));
 
 	USART3->TDR = (send & 0xFF);
+	HAL_Delay(1);
 }
 
 void transmit_string_uart(uint8_t send[])
@@ -159,7 +152,6 @@ void transmit_string_uart(uint8_t send[])
 	while(send[i] != '\0')
 	{
 		transmit_uart(send[i]);
-		HAL_Delay(1);
 		i++;
 	}
 }
