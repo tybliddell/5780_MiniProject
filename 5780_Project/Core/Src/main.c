@@ -3,7 +3,7 @@
   ******************************************************************************
   * @file           : main.c
   * @brief          : Main program body
-  * @authors		: Tyler Liddel, Hyrum Saunders
+  * @authors				: Tyler Liddel, Hyrum Saunders
   ******************************************************************************
   * @attention
   *
@@ -45,7 +45,7 @@ int main(void)
 	
 	uint8_t upcount = 1, pan = 90, tilt = 90;
 
-	block = 0;			
+	block = 0;
 	
 	// UART
 	// PC4: TX, PC5: RX
@@ -94,7 +94,7 @@ int main(void)
 		{
 			pan--;
 		}
-		set_motor_pos(pan, tilt);
+		//set_motor_pos(pan, tilt);
 		HAL_Delay(1);
   }
 }
@@ -205,8 +205,8 @@ void PWM_init(void)
 	 * duty cycle (90 deg). The duty cycle should
 	 * always stay between 5-10% (1170-4230)
 	 */
-	TIM3->CCR1 = 4230; // PB4
-	TIM3->CCR2 = 2700; // PB5
+	TIM3->CCR1 = 4230; // PB4 Pan
+	TIM3->CCR2 = 1170; // PB5 Tilt
 	
 	// Enable timer 3
 	TIM3->CR1 = 1;
