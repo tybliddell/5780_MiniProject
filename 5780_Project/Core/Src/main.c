@@ -57,7 +57,7 @@ int main(void)
 	curr_x = 157;
 	curr_y = 103;
 	scale = 2;
-	wait_time = 5;
+	wait_time = 1;
 	dup_count = 0;
 	
 	block = 0;
@@ -106,25 +106,29 @@ int main(void)
 		
 		
 		if(curr_x > 157) 
-			curr_pan -= scale;
-		else
 			curr_pan += scale;
-		
+		else
+			curr_pan -= scale;
+		/*
 		if(curr_y > 103)
 			curr_tilt += scale;
 		else 
 			curr_tilt -= scale;
 		
+		*/
+		
 		if(curr_pan > 4200)
 			curr_pan = 4200;
+		
 		if(curr_pan < 880)
 			curr_pan = 880;
 		
+		/*
 		if(curr_tilt > 4200)
 			curr_tilt = 4200;
 		if(curr_tilt < 880)
 			curr_tilt = 880;
-		
+		*/
 		if(dup_count < 50) {
 			set_motor_pos(curr_pan, curr_tilt);
 			toggle_LED(GREEN);
@@ -137,14 +141,20 @@ int main(void)
 		
 		if(dup_count == 100)
 			dup_count--;
-		/*transmit_uart(curr_pan >> 8);
+		/*
+		transmit_uart(curr_x >> 8);
+		transmit_uart(curr_x);
+		
+		transmit_uart(curr_pan >> 8);
 		transmit_uart(curr_pan);
-		transmit_uart(curr_tilt >> 8);
-		transmit_uart(curr_tilt);
+		
+		transmit_uart(curr_y >> 8);
+		transmit_uart(curr_y);
+		transmit_uart(dup_count);
 		transmit_uart('\n');*/
 		last_x = curr_x;
 		last_y = curr_y;
-		HAL_Delay(wait_time);
+		//HAL_Delay(wait_time);
 		
 		//HAL_Delay(wait_time);
 		
@@ -258,7 +268,7 @@ void PWM_init(void)
 	 * duty cycle (90 deg). The duty cycle should
 	 * always stay between 5-10% (1170-4230)
 	 */
-	TIM3->CCR1 = 850; // PB4 Pan
+	TIM3->CCR1 = 2540; // PB4 Pan
 	TIM3->CCR2 = 850; // PB5 Tilt
 	
 	// Enable timer 3
