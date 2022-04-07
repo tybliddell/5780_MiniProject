@@ -51,8 +51,7 @@ int main(void)
 	
 	LED_init();
 	
-	uint8_t upcount = 1, pan = 90, tilt = 90;
-	curr_pan = 90;
+	curr_pan = 1000;
 	curr_tilt = 0;
 	curr_x = 157;
 	curr_y = 103;
@@ -82,82 +81,47 @@ int main(void)
 		/*transmit_uart(curr_x >> 8);
 		transmit_uart(curr_x);
 		transmit_uart(curr_y);
-		transmit_uart('\n');
-		HAL_Delay(50);
-		// Motor test
-		if (pan < 1)
-		{
-			upcount = 1;
-		}
-		else if (pan > 179)
-		{
-			upcount = 0;
-		}
-		if (upcount)
-		{
-			pan++;
-		}
-		else if (!upcount)
-		{
-			pan--;
-		}
-		//set_motor_pos(pan, tilt);
-		HAL_Delay(1);*/
-		
-		
-		if(curr_x > 157) 
-			curr_pan += scale;
-		else
-			curr_pan -= scale;
-		/*
-		if(curr_y > 103)
-			curr_tilt += scale;
-		else 
-			curr_tilt -= scale;
-		
+		transmit_uart('\n');		
 		*/
 		
-		if(curr_pan > 4200)
-			curr_pan = 4200;
+
+		if(dup_count < 45) {
+			/*if(curr_x > 157) 
+				curr_pan += scale;
+			else
+				curr_pan -= scale;
+			*/
+			if(curr_pan > 4200)
+				curr_pan = 4200;
+			
+			if(curr_pan < 880)
+				curr_pan = 880;
+			
+			
+			if(curr_y > 107)
+				curr_tilt += scale;
+			else if(curr_y < 99)
+				curr_tilt -= scale;
+			
+			if(curr_tilt > 4200)
+				curr_tilt = 4200;
+			if(curr_tilt < 880)
+				curr_tilt = 880;
 		
-		if(curr_pan < 880)
-			curr_pan = 880;
-		
-		/*
-		if(curr_tilt > 4200)
-			curr_tilt = 4200;
-		if(curr_tilt < 880)
-			curr_tilt = 880;
-		*/
-		if(dup_count < 50) {
+			
 			set_motor_pos(curr_pan, curr_tilt);
 			toggle_LED(GREEN);
 		}
-		if(last_x == curr_x && last_y == curr_y) {
+		if(last_x == curr_x && last_y == curr_y)
 			dup_count++;
-		}
 		else
 			dup_count = 0;
 		
 		if(dup_count == 100)
 			dup_count--;
-		/*
-		transmit_uart(curr_x >> 8);
-		transmit_uart(curr_x);
-		
-		transmit_uart(curr_pan >> 8);
-		transmit_uart(curr_pan);
-		
-		transmit_uart(curr_y >> 8);
-		transmit_uart(curr_y);
-		transmit_uart(dup_count);
-		transmit_uart('\n');*/
+
 		last_x = curr_x;
 		last_y = curr_y;
-		//HAL_Delay(wait_time);
-		
-		//HAL_Delay(wait_time);
-		
   }
 }
 
@@ -247,7 +211,7 @@ void PWM_init(void)
 	 * as possible so I can have very precise
 	 * duty cycles.
 	 */
-	TIM3->PSC = 4;
+	TIM3->PSC = 3;
 	TIM3->ARR = 40000;
 	
 	// Configure timer 3 output channels to PWM
@@ -268,8 +232,8 @@ void PWM_init(void)
 	 * duty cycle (90 deg). The duty cycle should
 	 * always stay between 5-10% (1170-4230)
 	 */
-	TIM3->CCR1 = 2540; // PB4 Pan
-	TIM3->CCR2 = 850; // PB5 Tilt
+	TIM3->CCR1 = 500; // PB4 Pan
+	TIM3->CCR2 = 500; // PB5 Tilt
 	
 	// Enable timer 3
 	TIM3->CR1 = 1;
@@ -282,8 +246,10 @@ void set_motor_pos(int pan, int tilt)
 {
 	//TIM3->CCR1 = 1170 + (pan * 17);
 	//TIM3->CCR2 = 1170 + (tilt * 17);
-	TIM3->CCR1 = 850 + pan;
-	TIM3->CCR2 = 850 + tilt;
+
+	TIM3->CCR1 = pan;
+	TIM3->CCR2 = tilt;
+	//TIM3->CNT = 0;
 }
 
 /**
