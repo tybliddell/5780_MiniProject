@@ -41,6 +41,9 @@ void set_motor_pos(int, int);
 void transmit_string_uart(uint8_t send[]);
 void transmit_uart(uint8_t send);
 
+// Integration functions
+void track_object(void);
+
 /* ---------------- Definitions ---------------- */
 // LED
 #define RED 6
