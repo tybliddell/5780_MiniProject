@@ -26,7 +26,7 @@ uint16_t block;
 uint16_t curr_x;
 uint16_t curr_y;
 uint8_t phase;
-int pan = 3000, tilt = 2000;
+int pan = 2240, tilt = 3600;
 
 /**
  * @brief  The application entry point.
@@ -198,8 +198,8 @@ void PWM_init(void)
 	 * duty cycle (90 deg). The duty cycle should
 	 * always stay between 5-10% (850-4230)
 	 */
-	TIM3->CCR1 = 3000; // PB4 Pan
-	TIM3->CCR2 = 3000; // PB5 Tilt
+	TIM3->CCR1 = 2240; // PB4 Pan
+	TIM3->CCR2 = 3600; // PB5 Tilt
 
 	// Enable timer 3
 	TIM3->CR1 = 1;
