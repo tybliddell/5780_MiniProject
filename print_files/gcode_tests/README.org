@@ -1,0 +1,6 @@
+* Gcode files for 3D printer.
+
+All settings specified here under the top level comments in each file show the limits of printer. Take special care if you try to run them as they have custom startoff code, bed size settings, and assume a bed leveling system is installed (BLTouch) and functions!
+
+*TAKE NOTE : I do not assume any responsibility for someone running gcode they found online...
+
