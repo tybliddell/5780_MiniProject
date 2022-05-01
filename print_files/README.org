@@ -1,0 +1,8 @@
+* Complete set of printing files needed for the build
+
+** some prints were remixed from parts on Thingiverse.
+- pieces remixed were obtained at the following
+  Pixy2Stuff [[https://www.thingiverse.com/thing:3180802]]
+
+
+Parts did not fit the original PixyCam and the need for modifications arose. All modifications and custom parts made were designed and printed by Miguel Gomez with and Ender 3 3D printer at home. 
