@@ -23,4 +23,4 @@ Rich Baird 😎 [Github Page](https://github.com/richbai90)
 Hyrum Saunders [Github Page](https://github.com/hyrum-saunders)
 
 ### Project Demonstration and Milestone Explanation
-https://youtu.be/rSYqTkc3UDk
+[Watch our demonstration here!](https://youtu.be/rSYqTkc3UDk)
