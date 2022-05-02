@@ -10,12 +10,12 @@ We seemed to have a decent amount of success using 115200 for the baud rate of t
 	
 
 ### 5780 Mini Project Authors
-Tyler Liddell
+Tyler Liddell (owns the repo)
 
-Miguel Gomez
+Miguel Gomez [Github Page](https://github.com/Mgomez-01)
 
-Rich Baird 😎
+Rich Baird 😎 [Github Page](https://github.com/richbai90)
 
-Hyrum Saunders
+Hyrum Saunders [Github Page](https://github.com/hyrum-saunders)
 
 
