@@ -6,3 +6,22 @@
 
 
 Parts did not fit the original PixyCam and the need for modifications arose. All modifications and custom parts made were designed and printed by Miguel Gomez with and Ender 3 3D printer at home. 
+
+** Highlights for the project building process
+
+The total amount of time spent designing, modifying, updating, and revising the 3D prints is not something that was a reqirement for the project, nor was it something that would receive any credit in the project in particular, but I still wanted to update this page to give an overview of the process in case someone would like to take this project and make their own changes/revisions.
+
+In total, there were, on average, 15 different versions of each file that was included in the project that each needed its own care and attention.
+
+*** Housing
+The housing of the device in particular had the most amount of revisions as it needed a good fit for the camera, easy outside access to the lens housing of the camera, while also protecting the components on the inside and allowing us to plug in from the rear. The housing was really a single model that I decided to separate into two parts. The rear cover and the shell.
+
+**** shell
+The shell needed design changes to allow the camera button on the top to be accessible for reprogramming of the color for tracking, as well as a hold for the lens and the LED that indicated whether or not something was located. These modifications were completed by myself (Miguel Gomez) as I took measurements of the board and created a custom model in fusion 360 that I used as the starting point.
+
+From there, revisions to the model were made as I dialed in the printer settings necessary to minimize squish at the floor, shrinkage of the part as it cooled, and modified the amount of infill for the rigidity/structure of the housing. Part of that process is shown in the included images directory and the stl files that are seen above.  
+
+
+**** rear cover
+The rear cover was a bit trickier. In addition to the squish at the floor and shrinkage of the part as it cools, it required a change in orientation for the print after adding in the pieces for the screws to attach to. These changes allowed for the screws to make good contact with the rear cover through the housing holes, and allow for a good adhesion of the mounting arm for the servo motor. The design was modified to shift the arm further back after it was found to interfere with the mobility of the tilting given the connected wires on the back of the camera. Adding in the extra space allowed for a fluid movement that did not cause any pinching in the wires, minimizing the stresses on the wires over time as the assembly moved around.
+
