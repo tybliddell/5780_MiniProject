@@ -25,9 +25,15 @@ These parameters seem to have different uses for the preprocessing, but have a d
 
 To capture a single item in frame, we needed to make some mods to the blocks tab. These changes are shown below:
 
-![Changes for Blocks settings]()
+![Changes for Blocks settings](https://github.com/tybliddell/5780_MiniProject/blob/main/BlocksVals.png)
+
+The changes here allow you to capture a specified size, number of captures, and max number of blocks per image captured. Since the ball we were planning to use could be fairly small when farther away, we wanted to make sure the size was still picked up. The 20 min seemed like a decent choice for that value, but we saw some issues with picking up stray signatures around the ball or from reflections in the area. More testing needed to find out what the best way to minimize that would be. 
 
 ### Misc settings
+
+The next thing is the baud rate for the UART, and the last piece needed to be configured. It can be seen below and found in the Interface tab. 
+
+~[Interface for baud rate]()
 
 #### 5780 Mini Project Authors
 Tyler Liddell [owns the repo](https://github.com/tybliddell)
