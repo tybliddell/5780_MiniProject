@@ -31,9 +31,16 @@ The changes here allow you to capture a specified size, number of captures, and 
 
 ### Misc settings
 
-The next thing is the baud rate for the UART, and the last piece needed to be configured. It can be seen below and found in the Interface tab. 
+The next thing is the baud rate for the UART, and the expert settings are last pieces needed to be configured. Uart settings as well as I2C settings can be seen below and found in the Interface tab, and the Expert tab contains some settings for ...uuhhh experts :) . 
 
-~[Interface for baud rate]()
+![Interface for baud rate]()
+
+#### Expert stuff
+
+The expert settings are shown below and mostly stay as they are. The LED brightness and the Teaching Threshold are the only ones you likely want to mess with unless you know what you are doing with the others. 
+
+![Expert Settings]()
+
 
 #### 5780 Mini Project Authors
 Tyler Liddell [owns the repo](https://github.com/tybliddell)
