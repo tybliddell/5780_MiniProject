@@ -17,7 +17,7 @@ The Pixycam has a lot of settings it holds internally and they can be modified/s
 
 
 Within the signature tuning tab, you can find the following:
-[Signature Tuining params](./signature_tune.png)
+[Signature Tuining params](https://github.com/tybliddell/5780_MiniProject/blob/main/signature_tune.png)
 
 These parameters seem to have different uses for the preprocessing, but have a direct relationship to the amount of post processing that can be done. I was unable to label these with anything useful, so we just sort of played around with the values until we found something that worked well in the lab. Note* This kind of development was mostly due to time, but we quickly realized that the pixy is a camera that can't really be used in a dynamic environment all too well. Using a better camera sensor with beefier post processing techniques would allow for harder, better, faster, and stronger tracking feedback. 
 
