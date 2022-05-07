@@ -23,6 +23,10 @@ These parameters seem to have different uses for the preprocessing, but have a d
 
 ### Capture settings
 
+To capture a single item in frame, we needed to make some mods to the blocks tab. These changes are shown below:
+
+![Changes for Blocks settings]()
+
 ### Misc settings
 
 #### 5780 Mini Project Authors
