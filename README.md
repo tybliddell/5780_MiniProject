@@ -1,5 +1,9 @@
 # PIXYCAM-BOT
 
+## Explanation
+
+The Pixycam-Bot is a ping pong ball tracking robot that contains a camera that sits on a pan and tilt-controllable assembly to continuously point itself at the ball. The project itself does little more than entertain us, but it could easily be expanded into many different applications including an automatic referee, an auto face-tracking webcam, and more.
+
 ## Diagram for project
 ![Pixy Diagram](https://github.com/tybliddell/5780_MiniProject/blob/main/Pinout_Project_Diagram.png)
 
