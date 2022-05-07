@@ -9,6 +9,14 @@ We seemed to have a decent amount of success using 115200 for the baud rate of t
 
 ### Lighting settings
 
+The Pixycam has a lot of settings it holds internally and they can be modified/stored in the memory. There are a few bars that each make some changes to the way the hardware interprets and processes the video stream. Here are the settings for that tuning:
+
+
+Within the signature tuning tab, you can find the following:
+[Signature Tuining params](./signature_tune.png)
+
+These parameters seem to have different uses for the preprocessing, but have a direct relationship to the amount of post processing that can be done. I was unable to label these with anything useful, so we just sort of played around with the values until we found something that worked well in the lab. Note* This kind of development was mostly due to time, but we quickly realized that the pixy is a camera that can't really be used in a dynamic environment all too well. Using a better camera sensor with beefier post processing techniques would allow for harder, better, faster, and stronger tracking feedback. 
+
 ### Capture settings
 
 ### Misc settings
