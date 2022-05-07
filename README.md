@@ -53,3 +53,8 @@ Hyrum Saunders [Github Page](https://github.com/hyrum-saunders)
 
 ### Project Demonstration and Milestone Explanation
 [Watch our demonstration here!](https://youtu.be/rSYqTkc3UDk)
+
+
+# Thanks for stopping by!
+
+We at the Pixycam-Bot team would like to thank you for making it to the bottom of the readme and going through out stuff! We are glad you could take a moment to rummage through our page to see what we made! As a thank you, we would love for you to take a second to watch this sincere video of us expressing our appreciation.[Enjoy](https://bit.ly/3yhirYQ)
