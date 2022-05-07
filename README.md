@@ -33,13 +33,13 @@ The changes here allow you to capture a specified size, number of captures, and 
 
 The next thing is the baud rate for the UART, and the expert settings are last pieces needed to be configured. Uart settings as well as I2C settings can be seen below and found in the Interface tab, and the Expert tab contains some settings for ...uuhhh experts :) . 
 
-![Interface for baud rate]()
+![Interface for baud rate](https://github.com/tybliddell/5780_MiniProject/blob/main/uart.png)
 
 #### Expert stuff
 
 The expert settings are shown below and mostly stay as they are. The LED brightness and the Teaching Threshold are the only ones you likely want to mess with unless you know what you are doing with the others. 
 
-![Expert Settings]()
+![Expert Settings](https://github.com/tybliddell/5780_MiniProject/blob/main/expert.png)
 
 
 #### 5780 Mini Project Authors
